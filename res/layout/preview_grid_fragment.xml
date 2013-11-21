@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+
+
+	<RelativeLayout
+	    android:id="@+id/topBarMain"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@color/toolbar" >
+	
+	    <ImageButton
+	        android:id="@+id/cancelMoreButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentLeft="true"
+	        android:contentDescription="@string/cancel"
+	        android:background="@drawable/button"
+	        android:onClick="OnCancelPreviewButtonClick"
+	        android:src="@drawable/ic_cancel" />
+	
+	    <ImageButton
+	        android:id="@+id/printButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        
+	        android:layout_alignParentRight="true"
+	        android:layout_alignWithParentIfMissing="true"
+	        android:contentDescription="@string/print"
+	        android:background="@drawable/button"
+	        android:onClick="OnPrintButtonClick"
+	        android:src="@drawable/ic_print" />
+	
+	</RelativeLayout>
+
+
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"  >
+	    
+		<GridView 
+		    android:id="@+id/preview_grid"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:clipToPadding="false"
+		    android:columnWidth="150dip"
+		    android:verticalSpacing="4dip" 
+		    android:numColumns="auto_fit"
+		    android:padding="0dp" />
+		
+	</RelativeLayout>
+	
+	
+</LinearLayout>
