@@ -285,6 +285,7 @@
                 android:background="@drawable/button"
                 android:onClick="OnPrintButtonClick"
                 android:src="@drawable/ic_print" />
+
 <!--
             <ImageButton
                 android:id="@+id/copyTextButton"

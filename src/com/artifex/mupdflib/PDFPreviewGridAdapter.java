@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 		mCore = core;
 
 		File documentCache = new File(StorageUtils.getCacheSubDirectory(
-				mContext, "previews"), MD5.MD5Hash((new File(core.getFileName())).getName()));
+				mContext, "previews2"), MD5.MD5Hash((new File(core.getFileName())).getName()));
 		if (!documentCache.exists())
 			documentCache.mkdirs();
 
@@ -116,11 +117,13 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 
 	static class ViewHolder {
 		ImageView previewPageImageView = null;
+		ProgressBar previewPageProgress = null;
 		// TextView previewPageNumber = null;
 		//LinearLayout previewPageLinearLayout = null;
 
 		ViewHolder(View view) {
 			this.previewPageImageView = (ImageView) view.findViewById(R.id.preview_grid_image);
+			this.previewPageProgress = (ProgressBar) view.findViewById(R.id.preview_grid_image_progressbar);
 			// this.previewPageNumber = (TextView)
 			// view.findViewById(R.id.PreviewPageNumber);
 			// this.previewPageLinearLayout = (LinearLayout) view.findViewById(R.id.PreviewPageLinearLayout);
@@ -168,7 +171,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 		protected Bitmap doInBackground(Integer... params) {
 			if (mPreviewSize == null) {
 				mPreviewSize = new Point();
-				int padding = mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height)-4;
+				int padding = mContext.getResources().getDimensionPixelSize(R.dimen.preview_height);
 				PointF mPageSize = mCore.getSinglePageSize(0);
 				float scale = mPageSize.y / mPageSize.x;
 				mPreviewSize.x = (int) ((float) padding / scale);
@@ -192,6 +195,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 					final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(holder.previewPageImageView);
 					if (this == bitmapWorkerTask && holder != null) {
 						holder.previewPageImageView.setImageBitmap(bitmap);
+						holder.previewPageProgress.setVisibility(ProgressBar.GONE);
 						// holder.previewPageNumber.setText(String.valueOf(position
 						// + 1));
 						// if (getCurrentlyViewing() == position || (mCore.getDisplayPages() == 2 && getCurrentlyViewing() == position - 1)) {

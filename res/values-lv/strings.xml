@@ -1,0 +1,55 @@
+﻿<resources>
+
+	<string name="no_media_warning">Failu glabātuve nav pieejama</string>
+    <string name="no_media_hint">Savienojot failu glabātuvi ar datoru tā paliek neizmantojama</string>
+    <string name="cancel">Atcelt</string>
+    <string name="search_backwards">Meklēt iepriekšejo</string>
+    <string name="search_forwards">Meklēt nākamo</string>
+    <string name="search_document">Meklēt dokumentā</string>
+    <string name="picker_title_App_Ver_Dir">%1$s %2$s: %3$s</string>
+    <string name="outline_title">Satura rādītājs</string>
+    <string name="enter_password">Ievadiet paroli</string>
+    <string name="text_not_found">Teksts nav atrasts</string>
+    <string name="searching_">Meklēšana&#8230;</string>
+    <string name="toggle_links">Izcelt un aktivizēt linkus</string>
+    <string name="no_further_occurrences_found">Nav atrasti citi notikumi</string>
+    <string name="select">Iezīmēt</string>
+    <string name="search">Meklēt</string>
+    <string name="copy">Kopēt</string>
+    <string name="strike_out">Pārsvītrots</string>
+    <string name="delete">Dzēst</string>
+    <string name="highlight">Izcelts</string>
+    <string name="underline">Apakšstrīpa</string>
+    <string name="edit_annotations">Labot anotacijas</string>
+    <string name="ink">Tinte</string>
+    <string name="save">Saglabāt</string>
+    <string name="print">Drukāt</string>
+    <string name="dismiss">Atcelt</string>
+    <string name="_up_one_level_">[Vienu līmeni augstāk]</string>
+    <string name="yes">Jā</string>
+    <string name="no">Nē</string>
+    <string name="entering_reflow_mode">Ieiet reflow režīmā</string>
+    <string name="leaving_reflow_mode">Iziet no reflow režīma</string>
+    <string name="print_failed">Drukāšana neveiksmīga</string>
+    <string name="select_text">Iezīmēt tekstu</string>
+    <string name="copied_to_clipboard">Iekopēts buferī</string>
+    <string name="no_text_selected">Teksts nav iezīmēts</string>
+    <string name="draw_annotation">Zīmēt anotāciju</string>
+    <string name="nothing_to_save">Nav nekas saglabājams</string>
+    <string name="document_has_changes_save_them_">Dokumentā ir izmaiņas. Saglabāt tās?</string>
+    <string name="cannot_open_document">Neizdevās atvērt dokumentu</string>
+    <string name="cannot_open_document_Reason">Neizdevās atvērt dokumentu: %1$s</string>
+    <string name="cannot_open_file_Path">Neizdevās atvērt failu: %1$s</string>
+    <string name="cannot_open_buffer">Neizdevās atvērt buffei</string>
+    <string name="fill_out_text_field">Aizpildīt teksta lauku</string>
+    <string name="okay">Labi</string>
+    <string name="choose_value">Izvēlēties vērtību</string>
+    <string name="not_supported">Netiek atbalstīts</string>
+    <string name="copy_text_to_the_clipboard">Iekopēt tekstu buferī</string>
+    <string name="more">Vairāk</string>
+    <string name="accept">Piekrītu</string>
+    <string name="copy_text">kopēt tekstu</string>
+    <string name="format_currently_not_supported">Šīs formāts patreiz netiek atbalstīts</string>
+	<string name="toggle_reflow_mode">Pārslēgties reflow režīnā</string>
+    
+</resources>

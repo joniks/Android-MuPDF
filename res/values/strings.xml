@@ -1,6 +1,5 @@
 <resources>
 
-    <string name="app_name">mupdflib</string>
 
 	<string name="no_media_warning">Storage media not present</string>
     <string name="no_media_hint">Sharing the storage media with a PC can make it inaccessible</string>
