@@ -51,5 +51,8 @@
     <string name="copy_text">kopēt tekstu</string>
     <string name="format_currently_not_supported">Šīs formāts patreiz netiek atbalstīts</string>
 	<string name="toggle_reflow_mode">Pārslēgties reflow režīnā</string>
-    
+	
+	<string name="one_page_of_count">%1$d no %2$d</string>
+	<string name="two_pages_of_count">%1$d-%2$d no %3$d</string>
+	
 </resources>

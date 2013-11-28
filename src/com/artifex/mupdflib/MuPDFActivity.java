@@ -283,6 +283,8 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		LibraryUtils.reloadLocale(getApplicationContext());
+		
 		mAlertBuilder = new AlertDialog.Builder(this);
 
 		if (core == null) {
@@ -704,8 +706,14 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 					mFilePicker.onPick(data.getData());
 				break;
 			case PAGE_CHOICE_REQUEST:
-				if (resultCode >= 0)
-					mDocView.setDisplayedViewIndex(resultCode);
+				if (resultCode >= 0) {
+					int page = resultCode;
+					if (core.getDisplayPages() == 2) {
+						page = (page + 1) / 2;
+					}
+					mDocView.setDisplayedViewIndex(page);
+					setCurrentlyViewedPreview();
+				}
 				break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -934,13 +942,15 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		if (core == null)
 			return;
 		if (core.getDisplayPages() == 2 && index!=0 && index!=core.countPages()-1) {
-			mPageNumberView.setText(String.format("%d - %d from %d", (index*2)-2, (index*2)-1, core.countSinglePages()));
+			mPageNumberView.setText(String.format(getString(R.string.two_pages_of_count), (index*2)-2, (index*2)-1, core.countSinglePages()));
+		}
+		else if (core.getDisplayPages() == 2 && (index==0 || index==core.countPages()-1)) {
+			mPageNumberView.setText(String.format(getString(R.string.one_page_of_count), index+1, core.countSinglePages()));
 		}
 		else {
-			mPageNumberView.setText(String.format("%d from %d", index + 1,core.countPages()));
+			mPageNumberView.setText(String.format(getString(R.string.one_page_of_count), index+1, core.countPages()));
 		}
 	}
-
 	private void printDoc() {
 		if (!core.fileFormat().startsWith("PDF")) {
 			showInfo(getString(R.string.format_currently_not_supported));
@@ -1025,7 +1035,12 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		
 		
 		if (core != null) {
+			int i = mDocView.getDisplayedViewIndex();
+			if (core.getDisplayPages() == 2) {
+				i = (i * 2) - 1;
+			}
 			PDFPreviewGridActivityData.get().core = core;
+			PDFPreviewGridActivityData.get().position = i;
 			//PDFPreviewGridActivity prevAct = new PDFPreviewGridActivity();
 			//Intent intent = prevAct.getIntent();
 			Intent intent = new Intent(MuPDFActivity.this, PDFPreviewGridActivity.class);

@@ -3,6 +3,7 @@
  */
 package com.artifex.mupdflib;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
@@ -18,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +35,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 	private static final String TAG = PDFPreviewGridAdapter.class.getSimpleName();
 	private Context mContext;
 	private MuPDFCore mCore;
+	private int mPosition;
 
 	private Point mPreviewSize;
 	private final SparseArray<Bitmap> mBitmapCache = new SparseArray<Bitmap>();
@@ -42,9 +44,10 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 	private int currentlyViewing;
 	private Bitmap mLoadingBitmap;
 
-	public PDFPreviewGridAdapter(Context context, MuPDFCore core) {
+	public PDFPreviewGridAdapter(Context context, MuPDFCore core, int position) {
 		mContext = context;
 		mCore = core;
+		mPosition = position;
 
 		File documentCache = new File(StorageUtils.getCacheSubDirectory(
 				mContext, "previews2"), MD5.MD5Hash((new File(core.getFileName())).getName()));
@@ -99,7 +102,9 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(mContext, "Item clicked: "+ position, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(mContext, "Item clicked: "+ position, Toast.LENGTH_SHORT).show();
+				((Activity)mContext).setResult(position);
+				((Activity)mContext).finish();
 			}
 		});
 		
@@ -110,7 +115,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 		
 		
 		// holder.previewPageNumber.setText(String.valueOf(position + 1));
-		// holder.previewPageLinearLayout.setBackgroundColor(Color.TRANSPARENT);
+		holder.previewGridItemRelativeLayout.setBackgroundColor(Color.TRANSPARENT);
 		drawPageImageView(holder, position);
 		return convertView;
 	}
@@ -119,14 +124,14 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 		ImageView previewPageImageView = null;
 		ProgressBar previewPageProgress = null;
 		// TextView previewPageNumber = null;
-		//LinearLayout previewPageLinearLayout = null;
+		RelativeLayout previewGridItemRelativeLayout = null;
 
 		ViewHolder(View view) {
 			this.previewPageImageView = (ImageView) view.findViewById(R.id.preview_grid_image);
 			this.previewPageProgress = (ProgressBar) view.findViewById(R.id.preview_grid_image_progressbar);
 			// this.previewPageNumber = (TextView)
 			// view.findViewById(R.id.PreviewPageNumber);
-			// this.previewPageLinearLayout = (LinearLayout) view.findViewById(R.id.PreviewPageLinearLayout);
+			this.previewGridItemRelativeLayout = (RelativeLayout) view.findViewById(R.id.PreviewGridItemRelativeLayout);
 		}
 	}
 
@@ -196,13 +201,13 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 					if (this == bitmapWorkerTask && holder != null) {
 						holder.previewPageImageView.setImageBitmap(bitmap);
 						holder.previewPageProgress.setVisibility(ProgressBar.GONE);
-						// holder.previewPageNumber.setText(String.valueOf(position
-						// + 1));
-						// if (getCurrentlyViewing() == position || (mCore.getDisplayPages() == 2 && getCurrentlyViewing() == position - 1)) {
-						//	holder.previewPageLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.thumbnail_selected_background));
-						// } else {
-						//	holder.previewPageLinearLayout.setBackgroundColor(Color.TRANSPARENT);
-						// }
+						// holder.previewPageNumber.setText(String.valueOf(position + 1));
+						//if (getCurrentlyViewing() == position) {
+						if (mPosition == position) {
+							holder.previewGridItemRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.thumbnail_selected_background));
+						} else {
+							holder.previewGridItemRelativeLayout.setBackgroundColor(Color.TRANSPARENT);
+						}
 					}
 				}
 			}

@@ -2,6 +2,7 @@ package com.artifex.mupdflib;
 
 public class PDFPreviewGridActivityData {
 	public MuPDFCore core;
+	public int position;
 	static private PDFPreviewGridActivityData singleton;
 
 	static public void set(PDFPreviewGridActivityData d) {
