@@ -27,6 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.artifex.mupdflib.CallbackApplication.MuPDFCallbackClass;
 import com.artifex.mupdflib.TwoWayView.Orientation;
 
 import java.io.InputStream;
@@ -44,7 +45,7 @@ class ThreadPerTaskExecutor implements Executor {
 public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupport {
 	/* The core rendering instance */
 	//enum TopBarMode {Main, Search, Annot, Delete, More, Accept};
-	enum TopBarMode {Main, Search, More};
+	enum TopBarMode {Main, Search};
 	//enum AcceptMode {Highlight, Underline, StrikeOut, Ink, CopyText};
 
 	private final int OUTLINE_REQUEST = 0;
@@ -53,6 +54,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 	private final int PAGE_CHOICE_REQUEST = 3;
 	private MuPDFCore core;
 	private String mFileName;
+	private String mDocName;
 	private int mOrientation;
 	private MuPDFReaderView mDocView;
 	private View mButtonsView;
@@ -483,8 +485,11 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		mDocView.setAdapter(new MuPDFPageAdapter(this, this, core));
 		
 		Intent intent = getIntent();
+		boolean idleenabled = intent.getBooleanExtra("idleenabled", false);
 		boolean highlight = intent.getBooleanExtra("linkhighlight", false);
+		mDocView.setKeepScreenOn(!idleenabled);
 		mDocView.setLinksEnabled(highlight);
+		mDocName = intent.getStringExtra("docname");
 		
 		mSearchTask = new SearchTask(this, core) {
 			@Override
@@ -938,18 +943,25 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		}
 	}
 
+	@SuppressLint("DefaultLocale")
 	private void updatePageNumView(int index) {
 		if (core == null)
 			return;
+		String pageStr = "";
 		if (core.getDisplayPages() == 2 && index!=0 && index!=core.countPages()-1) {
+			pageStr = String.format("%1$d-%2$d", (index*2)-2, (index*2)-1);
 			mPageNumberView.setText(String.format(getString(R.string.two_pages_of_count), (index*2)-2, (index*2)-1, core.countSinglePages()));
 		}
 		else if (core.getDisplayPages() == 2 && (index==0 || index==core.countPages()-1)) {
+			pageStr = String.format("%1$d", index+1);
 			mPageNumberView.setText(String.format(getString(R.string.one_page_of_count), index+1, core.countSinglePages()));
 		}
 		else {
+			pageStr = String.format("%1$d", index+1);
 			mPageNumberView.setText(String.format(getString(R.string.one_page_of_count), index+1, core.countPages()));
 		}
+
+		MuPDFCallbackClass.sendGaiView(String.format("documentView (%1$s), page (%2$s)", mDocName, pageStr));
 	}
 	private void printDoc() {
 		if (!core.fileFormat().startsWith("PDF")) {
@@ -1045,6 +1057,8 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 			//Intent intent = prevAct.getIntent();
 			Intent intent = new Intent(MuPDFActivity.this, PDFPreviewGridActivity.class);
 			startActivityForResult(intent, PAGE_CHOICE_REQUEST);
+			
+			MuPDFCallbackClass.sendGaiView(String.format("documentThumbView (%1$s)", mDocName));
 
 		}
 		
@@ -1080,10 +1094,12 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		mTopBarSwitcher.setDisplayedChild(mTopBarMode.ordinal());
 	}
 	*/
+	/*
 	public void OnCancelAnnotButtonClick(View v) {
 		mTopBarMode = TopBarMode.More;
 		mTopBarSwitcher.setDisplayedChild(mTopBarMode.ordinal());
 	}
+	*/
 /*
 	public void OnHighlightButtonClick(View v) {
 		mTopBarMode = TopBarMode.Accept;
