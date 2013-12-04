@@ -97,6 +97,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
+		holder.previewPageProgress.setVisibility(ProgressBar.VISIBLE);
 		holder.previewPageImageView.setOnClickListener(new OnClickListener() {
 			
 			@Override
