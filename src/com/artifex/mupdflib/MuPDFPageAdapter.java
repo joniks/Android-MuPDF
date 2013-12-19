@@ -11,13 +11,11 @@ import android.widget.BaseAdapter;
 
 public class MuPDFPageAdapter extends BaseAdapter {
 	private final Context mContext;
-	//private final FilePickerSupport mFilePickerSupport;
 	private final FilePicker.FilePickerSupport mFilePickerSupport;
 	private final MuPDFCore mCore;
 	private final SparseArray<PointF> mPageSizes = new SparseArray<PointF>();
 	private       Bitmap mSharedHqBm;
 
-	//public MuPDFPageAdapter(Context c, FilePickerSupport filePickerSupport, MuPDFCore core) {
 	public MuPDFPageAdapter(Context c, FilePicker.FilePickerSupport filePickerSupport, MuPDFCore core) {
 
 		mContext = c;
@@ -40,8 +38,7 @@ public class MuPDFPageAdapter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		final MuPDFPageView pageView;
 		if (convertView == null) {
-			//pageView = new MuPDFPageView(mContext, mFilePickerSupport, mCore, new Point(parent.getWidth(), parent.getHeight()));
-			if (mSharedHqBm == null || mSharedHqBm.getWidth() != parent.getWidth() || mSharedHqBm.getWidth() != parent.getWidth())
+			if (mSharedHqBm == null || mSharedHqBm.getWidth() != parent.getWidth() || mSharedHqBm.getHeight() != parent.getHeight())
 				mSharedHqBm = Bitmap.createBitmap(parent.getWidth(), parent.getHeight(), Bitmap.Config.ARGB_8888);
 
 			pageView = new MuPDFPageView(mContext, mFilePickerSupport, mCore, new Point(parent.getWidth(), parent.getHeight()), mSharedHqBm);

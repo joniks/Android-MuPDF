@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.artifex.mupdflib;
 
 import android.content.Context;
@@ -23,10 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 
-/**
- * @author Dmitry Valetin
- * 
- */
 public class ToolbarPreviewAdapter extends BaseAdapter {
 
 	private static final String TAG = ToolbarPreviewAdapter.class.getSimpleName();
@@ -49,12 +42,7 @@ public class ToolbarPreviewAdapter extends BaseAdapter {
 		if (!documentCache.exists())
 			documentCache.mkdirs();
 
-		// mPath = core.getFileDirectory() + "/previewcache/";
 		mPath = documentCache.toString() + File.separator;
-
-		// File mCacheDirectory = new File(mPath);
-		// if (!mCacheDirectory.exists())
-		// mCacheDirectory.mkdirs();
 
 		mLoadingBitmap = BitmapFactory.decodeResource(mContext.getResources(),
 				R.drawable.darkdenim3);

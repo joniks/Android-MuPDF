@@ -575,9 +575,14 @@ public abstract class PageView extends ViewGroup {
 		int h = bottom - top;
 
 		if (mEntire != null) {
-			mEntireMat.setScale(w/(float)mSize.x, h/(float)mSize.y);
-			mEntire.setImageMatrix(mEntireMat);
-			mEntire.invalidate();
+			//mEntireMat.setScale(w/(float)mSize.x, h/(float)mSize.y);
+			//mEntire.setImageMatrix(mEntireMat);
+			//mEntire.invalidate();
+			if (mEntire.getWidth() != w || mEntire.getHeight() != h) {
+				mEntireMat.setScale(w/(float)mSize.x, h/(float)mSize.y);
+				mEntire.setImageMatrix(mEntireMat);
+				mEntire.invalidate();
+			}
 			mEntire.layout(0, 0, w, h);
 		}
 
@@ -702,7 +707,7 @@ public abstract class PageView extends ViewGroup {
 					// Calling requestLayout here doesn't lead to a later call to layout. No idea
 					// why, but apparently others have run into the problem.
 					mPatch.layout(mPatchArea.left, mPatchArea.top, mPatchArea.right, mPatchArea.bottom);
-					invalidate();
+					//invalidate();
 				}
 			};
 

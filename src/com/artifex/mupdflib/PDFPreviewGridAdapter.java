@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.artifex.mupdflib;
 
 import android.app.Activity;
@@ -26,10 +23,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 
-/**
- * @author Dmitry Valetin
- * 
- */
 public class PDFPreviewGridAdapter extends BaseAdapter {
 
 	private static final String TAG = PDFPreviewGridAdapter.class.getSimpleName();
@@ -54,12 +47,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 		if (!documentCache.exists())
 			documentCache.mkdirs();
 
-		// mPath = core.getFileDirectory() + "/previewcache/";
 		mPath = documentCache.toString() + File.separator;
-
-		// File mCacheDirectory = new File(mPath);
-		// if (!mCacheDirectory.exists())
-		// mCacheDirectory.mkdirs();
 
 		mLoadingBitmap = BitmapFactory.decodeResource(mContext.getResources(),
 				R.drawable.darkdenim3);
@@ -102,20 +90,11 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				//Toast.makeText(mContext, "Item clicked: "+ position, Toast.LENGTH_SHORT).show();
 				((Activity)mContext).setResult(position);
 				((Activity)mContext).finish();
 			}
 		});
 		
-		//if (mPreviewSize != null) {
-		//	holder.previewPageImageView.setLayoutParams(new LinearLayout.LayoutParams(mPreviewSize.x, mPreviewSize.y));
-		//}
-		
-		
-		
-		// holder.previewPageNumber.setText(String.valueOf(position + 1));
 		holder.previewGridItemRelativeLayout.setBackgroundColor(Color.TRANSPARENT);
 		drawPageImageView(holder, position);
 		return convertView;
@@ -130,8 +109,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 		ViewHolder(View view) {
 			this.previewPageImageView = (ImageView) view.findViewById(R.id.preview_grid_image);
 			this.previewPageProgress = (ProgressBar) view.findViewById(R.id.preview_grid_image_progressbar);
-			// this.previewPageNumber = (TextView)
-			// view.findViewById(R.id.PreviewPageNumber);
+			// this.previewPageNumber = (TextView) view.findViewById(R.id.PreviewPageNumber);
 			this.previewGridItemRelativeLayout = (RelativeLayout) view.findViewById(R.id.PreviewGridItemRelativeLayout);
 		}
 	}
@@ -203,7 +181,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 						holder.previewPageImageView.setImageBitmap(bitmap);
 						holder.previewPageProgress.setVisibility(ProgressBar.GONE);
 						// holder.previewPageNumber.setText(String.valueOf(position + 1));
-						//if (getCurrentlyViewing() == position) {
+
 						if (mPosition == position) {
 							holder.previewGridItemRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.thumbnail_selected_background));
 						} else {

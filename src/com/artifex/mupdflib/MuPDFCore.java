@@ -329,29 +329,7 @@ public class MuPDFCore {
 
 	public synchronized void updatePage(Bitmap bm, int page, int pageW,
 			int pageH, int patchX, int patchY, int patchW, int patchH) {
-		///Bitmap bm = null;
-		///Bitmap old_bm = h.getBm();
 
-		///if (old_bm == null)
-		///	return null;
-
-		///bm = old_bm.copy(Bitmap.Config.ARGB_8888, false);
-		///old_bm = null;
-
-		///updatePageInternal(bm, page, pageW, pageH, patchX, patchY, patchW,
-		///		patchH);
-		///return bm;
-		//Bitmap bitmap = null;
-		//Bitmap old_bm = h.getBm();
-
-		///Log.d(TAG, "updatePage " + h.getBm());
-		//if (old_bm == null || old_bm.isRecycled())
-		//	return null;
-
-		//bitmap = old_bm.copy(Bitmap.Config.ARGB_8888, true);
-		//old_bm = null;
-		
-		// updatePageInternal(bitmap, page, pageW, pageH, patchX, patchY, patchW, patchH);
 		Canvas canvas = null;
 		
 		try {
@@ -515,10 +493,7 @@ public class MuPDFCore {
 			temp.rect.right += pageWidth;
 			combinedLinkInfo[j] = temp;
 		}
-		///for (LinkInfo linkInfo: combinedLinkInfo) {
-		///	if(linkInfo instanceof LinkInfoExternal)
-		///		Log.d(TAG, "return " + ((LinkInfoExternal)linkInfo).url);
-		///}
+
 		return combinedLinkInfo;
 	}
 
