@@ -50,6 +50,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 	private final GestureDetector mGestureDetector;
 	private final ScaleGestureDetector mScaleGestureDetector;
 	private final Scroller mScroller;
+	private final Stepper mStepper;
 	private int mScrollerLastX;
 	private int mScrollerLastY;
 	private boolean mScrollDisabled;
@@ -63,6 +64,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 		mGestureDetector = new GestureDetector(this);
 		mScaleGestureDetector = new ScaleGestureDetector(context, this);
 		mScroller = new Scroller(context);
+		mStepper = new Stepper(this, this);
 	}
 
 	public ReaderView(Context context, AttributeSet attrs) {
@@ -70,6 +72,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 		mGestureDetector = new GestureDetector(this);
 		mScaleGestureDetector = new ScaleGestureDetector(context, this);
 		mScroller = new Scroller(context);
+		mStepper = new Stepper(this, this);
 	}
 
 	public ReaderView(Context context, AttributeSet attrs, int defStyle) {
@@ -77,6 +80,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 		mGestureDetector = new GestureDetector(this);
 		mScaleGestureDetector = new ScaleGestureDetector(context, this);
 		mScroller = new Scroller(context);
+		mStepper = new Stepper(this, this);
 	}
 
 	public int getDisplayedViewIndex() {
@@ -215,7 +219,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 		mScrollerLastX = mScrollerLastY = 0;
 		mScroller.startScroll(0, 0, remainingX - xOffset, remainingY - yOffset,
 				400);
-		post(this);
+		mStepper.prod();
 	}
 
 	public void smartMoveBackwards() {
@@ -299,9 +303,8 @@ public class ReaderView extends AdapterView<Adapter> implements
 			yOffset = -smartAdvanceAmount(screenHeight, top);
 		}
 		mScrollerLastX = mScrollerLastY = 0;
-		mScroller.startScroll(0, 0, remainingX - xOffset, remainingY - yOffset,
-				400);
-		post(this);
+		mScroller.startScroll(0, 0, remainingX - xOffset, remainingY - yOffset, 400);
+		mStepper.prod();
 	}
 
 	public void resetupChildren() {
@@ -373,7 +376,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 			mScrollerLastX = x;
 			mScrollerLastY = y;
 			requestLayout();
-			post(this);
+			mStepper.prod();
 		} else if (!mUserInteracting) {
 			// End of an inertial scroll and the user is not interacting.
 			// The layout is stable
@@ -443,7 +446,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 					&& expandedBounds.contains(0, 0)) {
 				mScroller.fling(0, 0, (int) velocityX, (int) velocityY,
 						bounds.left, bounds.right, bounds.top, bounds.bottom);
-				post(this);
+				mStepper.prod();
 			}
 		}
 
@@ -598,7 +601,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 					postUnsettle(cv);
 					// post to invoke test for end of animation
 					// where we must set hq area for the new current view
-					post(this);
+					mStepper.prod();
 
 					onMoveOffChild(mCurrent);
 					mCurrent++;
@@ -610,7 +613,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 					postUnsettle(cv);
 					// post to invoke test for end of animation
 					// where we must set hq area for the new current view
-					post(this);
+					mStepper.prod();
 
 					onMoveOffChild(mCurrent);
 					mCurrent--;
@@ -655,7 +658,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 			}
 
 			// post to ensure generation of hq area
-			post(this);
+			mStepper.prod();
 		}
 
 		// Ensure current view is present
@@ -850,7 +853,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 		if (corr.x != 0 || corr.y != 0) {
 			mScrollerLastX = mScrollerLastY = 0;
 			mScroller.startScroll(0, 0, corr.x, corr.y, 400);
-			post(this);
+			mStepper.prod();
 		}
 	}
 
