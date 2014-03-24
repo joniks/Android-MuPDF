@@ -488,7 +488,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		boolean idleenabled = intent.getBooleanExtra("idleenabled", false);
 		boolean highlight = intent.getBooleanExtra("linkhighlight", false);
 		mDocView.setKeepScreenOn(!idleenabled);
-		mDocView.setLinksEnabled(highlight);
+		mDocView.setLinksHighlighted(highlight);
 		mDocName = intent.getStringExtra("docname");
 		
 		mSearchTask = new SearchTask(this, core) {
@@ -991,6 +991,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 
 		int currentApiVersion = android.os.Build.VERSION.SDK_INT;
 		if (currentApiVersion >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+			@SuppressWarnings("unused")
 			SafeAnimatorInflater safe = new SafeAnimatorInflater((Activity)this, R.anim.info, (View)mInfoView);
 		} else {
 			mInfoView.setVisibility(View.VISIBLE);
@@ -1122,8 +1123,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		int displayPage = mDocView.getDisplayedViewIndex();
 		SearchTaskResult r = SearchTaskResult.get();
 		int searchPage = r != null ? r.pageNumber : -1;
-		mSearchTask.go(mSearchText.getText().toString(), direction,
-				displayPage, searchPage);
+		mSearchTask.go(mSearchText.getText().toString(), direction, displayPage, searchPage);
 	}
 
 	@Override

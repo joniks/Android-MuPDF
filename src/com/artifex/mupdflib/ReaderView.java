@@ -29,7 +29,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 	private static final int FLING_MARGIN = 100;
 	private static final int GAP = 20;
 
-	private static final float MIN_SCALE = 1.0f;
+	private static final float MIN_SCALE = 0.97f;
 	private static final float MAX_SCALE = 4.0f;
 	private static final float REFLOW_SCALE_FACTOR = 0.5f;
 
@@ -42,7 +42,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 	private final LinkedList<View> mViewCache = new LinkedList<View>();
 	private boolean mUserInteracting; // Whether the user is interacting
 	private boolean mScaling; // Whether the user is currently pinch zooming
-	private float mScale = 1.0f;
+	private float mScale = 0.97f;
 	private int mXScroll; // Scroll amounts recorded from events.
 	private int mYScroll; // and then accounted for in onLayout
 	private boolean mReflow = false;
@@ -322,7 +322,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 		mReflowChanged = true;
 		mResetLayout = true;
 
-		mScale = 1.0f;
+		mScale = 0.97f;
 		mXScroll = mYScroll = 0;
 
 		//int numChildren = mChildViews.size();
@@ -892,7 +892,13 @@ public class ReaderView extends AdapterView<Adapter> implements
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
 		float previousScale = mScale;
-		mScale += (mScale == 1f) ? 2f : -2f;
+		mScale += (mScale == 0.97f) ? 2f : -2f;
+		if (mScale < 2.97f) {
+			mScale = 0.97f;
+		}
+		if (mScale > 2.97f) {
+			mScale = 2.97f;
+		}
 		float factor = mScale/previousScale;
 		
 		View v = mChildViews.get(mCurrent);

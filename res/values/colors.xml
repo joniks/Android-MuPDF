@@ -16,8 +16,8 @@
     <color name="seek_thumb">#2572AC</color>
     <color name="seek_progress">#FFFFFF</color>
     
-    <color name="header">#ff33b5e5</color>
+    <color name="header">#FF33B5E5</color>
     
-    <color name="white">#ffffff</color>
-    <color name="thumbnail_selected_background">#bba8a8a8</color>
+    <color name="white">#FFFFFF</color>
+    <color name="thumbnail_selected_background">#BBA8A8A8</color>
 </resources>

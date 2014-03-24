@@ -49,15 +49,13 @@ public abstract class SearchTask {
 		}
 	}
 
-	public void go(final String text, int direction, int displayPage,
-			int searchPage) {
+	public void go(final String text, int direction, int displayPage, int searchPage) {
 		if (mCore == null)
 			return;
 		stop();
 
 		final int increment = direction;
-		final int startIndex = searchPage == -1 ? displayPage : searchPage
-				+ increment;
+		final int startIndex = searchPage == -1 ? displayPage : searchPage + increment;
 
 		final ProgressDialogX progressDialog = new ProgressDialogX(mContext);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -96,9 +94,7 @@ public abstract class SearchTask {
 				} else {
 					mAlertBuilder.setTitle(SearchTaskResult.get() == null ? R.string.text_not_found : R.string.no_further_occurrences_found);
 					AlertDialog alert = mAlertBuilder.create();
-					alert.setButton(AlertDialog.BUTTON_POSITIVE,
-							mContext.getString(R.string.dismiss),
-							(DialogInterface.OnClickListener) null);
+					alert.setButton(AlertDialog.BUTTON_POSITIVE, mContext.getString(R.string.dismiss), (DialogInterface.OnClickListener) null);
 					alert.show();
 				}
 			}

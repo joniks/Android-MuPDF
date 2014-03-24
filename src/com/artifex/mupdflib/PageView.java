@@ -1,9 +1,11 @@
 package com.artifex.mupdflib;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -98,7 +100,7 @@ class TextSelector {
 
 public abstract class PageView extends ViewGroup {
 	private static final int HIGHLIGHT_COLOR = 0x802572AC;
-	private static final int LINK_COLOR = 0x80AC7225;
+	private static final int LINK_COLOR = 0x20AC7225;
 	private static final int BOX_COLOR = 0xFF4444FF;
 	private static final int INK_COLOR = 0xFFFF0000;
 	private static final float INK_THICKNESS = 10.0f;
@@ -149,7 +151,13 @@ public abstract class PageView extends ViewGroup {
 		setBackgroundColor(BACKGROUND_COLOR);
 		//mEntireBmh = new BitmapHolder();
 		//mPatchBmh = new BitmapHolder();
-		mEntireBm = Bitmap.createBitmap(parentSize.x, parentSize.y, Config.ARGB_8888);
+		try {
+			mEntireBm = Bitmap.createBitmap(parentSize.x, parentSize.y, Config.ARGB_8888);
+		}
+		catch ( OutOfMemoryError e) {
+			Log.d("MY_OOM_ERROR", "error");
+		}
+		
 		mPatchBm = sharedHqBm;
 		mEntireMat = new Matrix();
 
@@ -339,6 +347,7 @@ public abstract class PageView extends ViewGroup {
 
 		if (mSearchView == null) {
 			mSearchView = new View(mContext) {
+				@SuppressLint("DrawAllocation")
 				@Override
 				protected void onDraw(final Canvas canvas) {
 					super.onDraw(canvas);
@@ -357,12 +366,20 @@ public abstract class PageView extends ViewGroup {
 					}
 
 					if (!mIsBlank && mLinks != null && mHighlightLinks) {
-						paint.setColor(LINK_COLOR);
+						paint.setStrokeWidth(2);
 						for (LinkInfo link : mLinks)
-							canvas.drawRect(link.rect.left * scale,
-									link.rect.top * scale, link.rect.right
-											* scale, link.rect.bottom * scale,
-									paint);
+						{
+							//canvas.drawRect(link.rect.left * scale, link.rect.top * scale, 
+							//		link.rect.right * scale, link.rect.bottom * scale, paint);
+							RectF rectfa = new RectF((link.rect.left - 2) * scale, (link.rect.top - 2) * scale, (link.rect.right + 2) * scale, (link.rect.bottom + 2) * scale);
+							paint.setStyle(Paint.Style.FILL);
+							paint.setColor(LINK_COLOR);
+							canvas.drawRoundRect(rectfa, 3 * scale, 3 * scale, paint);
+
+							paint.setStyle(Paint.Style.STROKE);
+							paint.setColor(HIGHLIGHT_COLOR);
+							canvas.drawRoundRect(rectfa, 3 * scale, 3 * scale, paint);
+						}
 					}
 
 					if (mSelectBox != null && mText != null) {
@@ -673,7 +690,8 @@ public abstract class PageView extends ViewGroup {
 				//mPatch.setScaleType(ImageView.ScaleType.FIT_CENTER);
 				mPatch.setScaleType(ImageView.ScaleType.MATRIX);
 				addView(mPatch);
-				mSearchView.bringToFront();
+				if (mSearchView != null) 
+					mSearchView.bringToFront();
 			}
 
 			mDrawPatch = new AsyncTask<PatchInfo, Void, PatchInfo>() {

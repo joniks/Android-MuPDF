@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -15,7 +16,7 @@ public class MuPDFReaderView extends ReaderView {
 	}
 
 	private final Context mContext;
-	private boolean mLinksEnabled = false;
+	private boolean mLinksHighlighted = false;
 	private Mode mMode = Mode.Viewing;
 	private boolean tapDisabled = false;
 	private int tapPageMargin;
@@ -29,8 +30,8 @@ public class MuPDFReaderView extends ReaderView {
 	protected void onHit(Hit item) {
 	};
 
-	public void setLinksEnabled(boolean b) {
-		mLinksEnabled = b;
+	public void setLinksHighlighted(boolean b) {
+		mLinksHighlighted = b;
 		resetupChildren();
 	}
 
@@ -51,10 +52,10 @@ public class MuPDFReaderView extends ReaderView {
 		DisplayMetrics dm = new DisplayMetrics();
 		act.getWindowManager().getDefaultDisplay().getMetrics(dm);
 		tapPageMargin = (int) dm.xdpi;
-		if (tapPageMargin < 100)
-			tapPageMargin = 100;
-		if (tapPageMargin > dm.widthPixels / 5)
-			tapPageMargin = dm.widthPixels / 5;
+		if (tapPageMargin < 80)
+			tapPageMargin = 80;
+		if (tapPageMargin > dm.widthPixels / 6)
+			tapPageMargin = dm.widthPixels / 6;
 	}
 
 	public boolean onSingleTapUp(MotionEvent e) {
@@ -65,20 +66,18 @@ public class MuPDFReaderView extends ReaderView {
 			Hit item = pageView.passClickEvent(e.getX(), e.getY());
 			onHit(item);
 			if (item == Hit.Nothing) {
-				if (mLinksEnabled
-						&& pageView != null
-						&& (link = pageView.hitLink(e.getX(), e.getY())) != null) {
+				if (/*mLinksEnabled && */pageView != null && (link = pageView.hitLink(e.getX(), e.getY())) != null) {
 					link.acceptVisitor(new LinkInfoVisitor() {
 						@Override
 						public void visitInternal(LinkInfoInternal li) {
 							// Clicked on an internal (GoTo) link
+							//TODO: goto page in landscape mode
 							setDisplayedViewIndex(li.pageNumber);
 						}
 
 						@Override
 						public void visitExternal(LinkInfoExternal li) {
-							Intent intent = new Intent(Intent.ACTION_VIEW, Uri
-									.parse(li.url));
+							Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(li.url));
 							mContext.startActivity(intent);
 						}
 
@@ -91,10 +90,10 @@ public class MuPDFReaderView extends ReaderView {
 					super.smartMoveBackwards();
 				} else if (e.getX() > super.getWidth() - tapPageMargin) {
 					super.smartMoveForwards();
-				} else if (e.getY() < tapPageMargin) {
-					super.smartMoveBackwards();
-				} else if (e.getY() > super.getHeight() - tapPageMargin) {
-					super.smartMoveForwards();
+				//} else if (e.getY() < tapPageMargin) {
+				//	super.smartMoveBackwards();
+				//} else if (e.getY() > super.getHeight() - tapPageMargin) {
+				//	super.smartMoveForwards();
 				} else {
 					onTapMainDocArea();
 				}
@@ -109,8 +108,7 @@ public class MuPDFReaderView extends ReaderView {
 		return super.onDown(e);
 	}
 
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		MuPDFView pageView = (MuPDFView) getDisplayedView();
 		switch (mMode) {
 		case Viewing:
@@ -128,8 +126,7 @@ public class MuPDFReaderView extends ReaderView {
 	}
 
 	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		switch (mMode) {
 		case Viewing:
 			return super.onFling(e1, e2, velocityX, velocityY);
@@ -211,13 +208,17 @@ public class MuPDFReaderView extends ReaderView {
 	}
 	
 	protected void onChildSetup(int i, View v) {
-		if (SearchTaskResult.get() != null
-				&& SearchTaskResult.get().pageNumber == i)
+		//TODO: page number in landscape
+		//MuPDFView pageView = (MuPDFView)getDisplayedView();
+		if (SearchTaskResult.get() != null)
+			Log.v("searchPagesSetup", "task result page number:"+SearchTaskResult.get().pageNumber + " child setup i:" + i + " pdfview getpage: " + ((MuPDFView) v).getPage());
+		
+		if (SearchTaskResult.get() != null && SearchTaskResult.get().pageNumber == i)
 			((MuPDFView) v).setSearchBoxes(SearchTaskResult.get().searchBoxes);
 		else
 			((MuPDFView) v).setSearchBoxes(null);
 
-		((MuPDFView) v).setLinkHighlighting(mLinksEnabled);
+		((MuPDFView) v).setLinkHighlighting(mLinksHighlighted);
 
 		((MuPDFView) v).setChangeReporter(new Runnable() {
 			public void run() {
@@ -232,8 +233,11 @@ public class MuPDFReaderView extends ReaderView {
 	}
 
 	protected void onMoveToChild(int i) {
-		if (SearchTaskResult.get() != null
-				&& SearchTaskResult.get().pageNumber != i) {
+		MuPDFView pageView = (MuPDFView)getDisplayedView();
+		if (SearchTaskResult.get() != null)
+			Log.v("searchPagesMoveToChild", "task result page number:"+SearchTaskResult.get().pageNumber + " child setup i:" + i + " pdfview getpage: " + pageView.getPage());
+
+		if (SearchTaskResult.get() != null && SearchTaskResult.get().pageNumber != i) {
 			SearchTaskResult.set(null);
 			resetupChildren();
 		}
