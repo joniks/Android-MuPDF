@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -209,14 +208,14 @@ public class MuPDFReaderView extends ReaderView {
 	
 	protected void onChildSetup(int i, View v) {
 		//TODO: page number in landscape
-		//MuPDFView pageView = (MuPDFView)getDisplayedView();
-		if (SearchTaskResult.get() != null)
-			Log.v("searchPagesSetup", "task result page number:"+SearchTaskResult.get().pageNumber + " child setup i:" + i + " pdfview getpage: " + ((MuPDFView) v).getPage());
-		
-		if (SearchTaskResult.get() != null && SearchTaskResult.get().pageNumber == i)
+		if (SearchTaskResult.get() != null && SearchTaskResult.get().pageNumber == i) {
 			((MuPDFView) v).setSearchBoxes(SearchTaskResult.get().searchBoxes);
-		else
+			((MuPDFView) v).setSearchBoxesPrim(SearchTaskResult.get().searchBoxesPrim);
+		}
+		else {
 			((MuPDFView) v).setSearchBoxes(null);
+			((MuPDFView) v).setSearchBoxesPrim(null);
+		}
 
 		((MuPDFView) v).setLinkHighlighting(mLinksHighlighted);
 
@@ -233,10 +232,6 @@ public class MuPDFReaderView extends ReaderView {
 	}
 
 	protected void onMoveToChild(int i) {
-		MuPDFView pageView = (MuPDFView)getDisplayedView();
-		if (SearchTaskResult.get() != null)
-			Log.v("searchPagesMoveToChild", "task result page number:"+SearchTaskResult.get().pageNumber + " child setup i:" + i + " pdfview getpage: " + pageView.getPage());
-
 		if (SearchTaskResult.get() != null && SearchTaskResult.get().pageNumber != i) {
 			SearchTaskResult.set(null);
 			resetupChildren();

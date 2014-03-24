@@ -60,12 +60,11 @@ public abstract class SearchTask {
 		final ProgressDialogX progressDialog = new ProgressDialogX(mContext);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progressDialog.setTitle(mContext.getString(R.string.searching_));
-		progressDialog
-				.setOnCancelListener(new DialogInterface.OnCancelListener() {
-					public void onCancel(DialogInterface dialog) {
-						stop();
-					}
-				});
+		progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			public void onCancel(DialogInterface dialog) {
+				stop();
+			}
+		});
 		progressDialog.setMax(mCore.countPages());
 
 		mSearchTask = new AsyncTask<Void, Integer, SearchTaskResult>() {
@@ -73,13 +72,18 @@ public abstract class SearchTask {
 			protected SearchTaskResult doInBackground(Void... params) {
 				int index = startIndex;
 
-				while (0 <= index && index < mCore.countPages()
-						&& !isCancelled()) {
+				while (0 <= index && index < mCore.countPages() && !isCancelled()) {
 					publishProgress(index);
-					RectF searchHits[] = mCore.searchPage(index, text);
+					int page = index;
+					if (mCore.getDisplayPages() == 2) {
+						page = (page * 2) - 1;
+					}
 
-					if (searchHits != null && searchHits.length > 0)
-						return new SearchTaskResult(text, index, searchHits);
+					RectF searchHits[] = mCore.searchPage(page, text);
+					RectF searchHitsPrim[] = mCore.getDisplayPages() == 2 ? mCore.searchPage(page+1, text) : null;
+
+					if ((searchHits != null && searchHits.length > 0) || (searchHitsPrim != null && searchHitsPrim.length > 0))
+						return new SearchTaskResult(text, index, searchHits, searchHitsPrim);
 
 					index += increment;
 				}

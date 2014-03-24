@@ -575,9 +575,8 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 				setButtonEnabled(mSearchFwd, haveText);
 
 				// Remove any previous search results
-				if (SearchTaskResult.get() != null
-						&& !mSearchText.getText().toString()
-								.equals(SearchTaskResult.get().txt)) {
+				if (SearchTaskResult.get() != null 
+						&& !mSearchText.getText().toString().equals(SearchTaskResult.get().txt)) {
 					SearchTaskResult.set(null);
 					mDocView.resetupChildren();
 				}

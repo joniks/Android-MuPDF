@@ -66,8 +66,7 @@ class TextSelector {
 
 		ArrayList<TextWord[]> lines = new ArrayList<TextWord[]>();
 		for (TextWord[] line : mText)
-			if (line[0].bottom > mSelectBox.top
-					&& line[0].top < mSelectBox.bottom)
+			if (line[0].bottom > mSelectBox.top && line[0].top < mSelectBox.bottom)
 				lines.add(line);
 
 		Iterator<TextWord[]> it = lines.iterator();
@@ -130,6 +129,7 @@ public abstract class PageView extends ViewGroup {
 	private       Bitmap    mPatchBm;
 	private AsyncTask<PatchInfo, Void, PatchInfo> mDrawPatch;
 	private RectF mSearchBoxes[];
+	private RectF mSearchBoxesPrim[];
 	protected LinkInfo mLinks[];
 	private RectF mSelectBox;
 	private TextWord mText[][];
@@ -221,6 +221,7 @@ public abstract class PageView extends ViewGroup {
 		mPatchArea = null;
 
 		mSearchBoxes = null;
+		mSearchBoxesPrim = null;
 		mLinks = null;
 		mSelectBox = null;
 		mText = null;
@@ -353,8 +354,7 @@ public abstract class PageView extends ViewGroup {
 					super.onDraw(canvas);
 					// Work out current total scale factor
 					// from source to view
-					final float scale = mSourceScale * (float) getWidth()
-							/ (float) mSize.x;
+					final float scale = mSourceScale * (float) getWidth() / (float) mSize.x;
 					final Paint paint = new Paint();
 
 					if (!mIsBlank && mSearchBoxes != null) {
@@ -365,13 +365,21 @@ public abstract class PageView extends ViewGroup {
 									rect.bottom * scale, paint);
 					}
 
+					if (!mIsBlank && mSearchBoxesPrim != null) {
+						paint.setColor(HIGHLIGHT_COLOR);
+						for (RectF rect : mSearchBoxesPrim)
+							canvas.drawRect(rect.left * scale + getWidth() / 2, rect.top * scale, 
+									rect.right * scale + getWidth() / 2, rect.bottom * scale, paint);
+					}
+					
 					if (!mIsBlank && mLinks != null && mHighlightLinks) {
 						paint.setStrokeWidth(2);
 						for (LinkInfo link : mLinks)
 						{
 							//canvas.drawRect(link.rect.left * scale, link.rect.top * scale, 
 							//		link.rect.right * scale, link.rect.bottom * scale, paint);
-							RectF rectfa = new RectF((link.rect.left - 2) * scale, (link.rect.top - 2) * scale, (link.rect.right + 2) * scale, (link.rect.bottom + 2) * scale);
+							RectF rectfa = new RectF((link.rect.left - 2) * scale, (link.rect.top - 2) * scale, 
+									(link.rect.right + 2) * scale, (link.rect.bottom + 2) * scale);
 							paint.setStyle(Paint.Style.FILL);
 							paint.setColor(LINK_COLOR);
 							canvas.drawRoundRect(rectfa, 3 * scale, 3 * scale, paint);
@@ -467,6 +475,12 @@ public abstract class PageView extends ViewGroup {
 			mSearchView.invalidate();
 	}
 
+	public void setSearchBoxesPrim(RectF searchBoxes[]) {
+		mSearchBoxesPrim = searchBoxes;
+		if (mSearchView != null)
+			mSearchView.invalidate();
+	}
+	
 	public void setLinkHighlighting(boolean f) {
 		mHighlightLinks = f;
 		if (mSearchView != null)
