@@ -745,8 +745,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 
 	@Override
 	public void setSelection(int arg0) {
-		throw new UnsupportedOperationException(getContext().getString(
-				R.string.not_supported));
+		throw new UnsupportedOperationException(getContext().getString(R.string.not_supported));
 	}
 
 	private View getCached() {
@@ -771,8 +770,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 	private void addAndMeasureChild(int i, View v) {
 		LayoutParams params = v.getLayoutParams();
 		if (params == null) {
-			params = new LayoutParams(LayoutParams.WRAP_CONTENT,
-					LayoutParams.WRAP_CONTENT);
+			params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		}
 		addViewInLayout(v, 0, params, true);
 		mChildViews.append(i, v); // Record the view against it's adapter index

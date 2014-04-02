@@ -103,7 +103,7 @@ public class MuPDFCore {
 
 	private native void saveInternal();
 
-	public static native boolean javascriptSupported();
+	public native boolean javascriptSupported();
 
 	public enum WidgetType {
 		NONE, TEXT, LISTBOX, COMBOBOX, SIGNATURE
