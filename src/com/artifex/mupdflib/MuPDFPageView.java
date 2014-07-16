@@ -1,6 +1,6 @@
 package com.artifex.mupdflib;
 
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
@@ -419,7 +419,7 @@ public class MuPDFPageView extends PageView implements MuPDFView {
 	}
 
 	@SuppressWarnings("deprecation")
-	@SuppressLint("NewApi")
+	@TargetApi(11)
 	public boolean copySelection() {
 		final StringBuilder text = new StringBuilder();
 

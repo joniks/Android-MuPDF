@@ -12,8 +12,10 @@ public abstract class CallbackApplication {
 		public static MuPDFCallbackInterface callback;
 	    public MuPDFCallbackClass(){}
 		static void sendGaiView(String str) {
-			gaiStr = str;
-			callback.callbackMethod(gaiStr);
+			if (callback!=null) {
+				gaiStr = str;
+				callback.callbackMethod(gaiStr);
+			}
 		}
 	}
 	

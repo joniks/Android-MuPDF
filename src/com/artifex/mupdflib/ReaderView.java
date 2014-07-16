@@ -731,8 +731,8 @@ public class ReaderView extends AdapterView<Adapter> implements
 
 	@Override
 	public View getSelectedView() {
-		throw new UnsupportedOperationException(getContext().getString(
-				R.string.not_supported));
+		//throw new UnsupportedOperationException(getContext().getString(R.string.not_supported));
+		return null;
 	}
 
 	@Override
