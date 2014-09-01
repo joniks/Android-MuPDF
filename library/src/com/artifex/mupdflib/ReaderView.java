@@ -53,7 +53,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 	private final Stepper mStepper;
 	private int mScrollerLastX;
 	private int mScrollerLastY;
-	private boolean mScrollDisabled;
+	//private boolean mScrollDisabled;
 
 	static abstract class ViewMapper {
 		abstract void applyToView(View view);
@@ -61,10 +61,27 @@ public class ReaderView extends AdapterView<Adapter> implements
 
 	public ReaderView(Context context) {
 		super(context);
-		mGestureDetector = new GestureDetector(this);
-		mScaleGestureDetector = new ScaleGestureDetector(context, this);
-		mScroller = new Scroller(context);
-		mStepper = new Stepper(this, this);
+		//mGestureDetector = new GestureDetector(this);
+		//mScaleGestureDetector = new ScaleGestureDetector(context, this);
+		//mScroller = new Scroller(context);
+		//mStepper = new Stepper(this, this);
+		// "Edit mode" means when the View is being displayed in the Android GUI editor. (this class
+		// is instantiated in the IDE, so we need to be a bit careful what we do).
+		if (isInEditMode())
+		{
+			mGestureDetector = null;
+			mScaleGestureDetector = null;
+			mScroller = null;
+			mStepper = null;
+		}
+		else
+		{
+			mGestureDetector = new GestureDetector(this);
+			mScaleGestureDetector = new ScaleGestureDetector(context, this);
+			mScroller        = new Scroller(context);
+			mStepper = new Stepper(this, this);
+		}
+
 	}
 
 	public ReaderView(Context context, AttributeSet attrs) {
@@ -393,7 +410,8 @@ public class ReaderView extends AdapterView<Adapter> implements
 
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
-		if (mScrollDisabled)
+		//if (mScrollDisabled)
+		if (mScaling)
 			return true;
 
 		View v = mChildViews.get(mCurrent);
@@ -458,7 +476,8 @@ public class ReaderView extends AdapterView<Adapter> implements
 
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		if (!mScrollDisabled) {
+		//if (!mScrollDisabled) {
+		if (!mScaling) {
 			mXScroll -= distanceX;
 			mYScroll -= distanceY;
 			requestLayout();
@@ -519,7 +538,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 		mXScroll = mYScroll = 0;
 		// Avoid jump at end of scaling by disabling scrolling
 		// until the next start of gesture
-		mScrollDisabled = true;
+		//mScrollDisabled = true;
 		return true;
 	}
 
@@ -539,7 +558,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 	public boolean onTouchEvent(MotionEvent event) {
 		mScaleGestureDetector.onTouchEvent(event);
 
-		if (!mScaling)
+		//if (!mScaling)
 			mGestureDetector.onTouchEvent(event);
 
 		//if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
@@ -548,7 +567,7 @@ public class ReaderView extends AdapterView<Adapter> implements
 		}
 		//if (event.getActionMasked() == MotionEvent.ACTION_UP) {
 		if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
-			mScrollDisabled = false;
+			//mScrollDisabled = false;
 			mUserInteracting = false;
 
 			View v = mChildViews.get(mCurrent);
@@ -585,6 +604,11 @@ public class ReaderView extends AdapterView<Adapter> implements
 	protected void onLayout(boolean changed, int left, int top, int right,
 			int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
+
+		// "Edit mode" means when the View is being displayed in the Android GUI editor. (this class
+		// is instantiated in the IDE, so we need to be a bit careful what we do).
+		if (isInEditMode())
+			return;
 
 		View cv = mChildViews.get(mCurrent);
 		Point cvOffset;

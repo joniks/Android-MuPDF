@@ -198,6 +198,7 @@ public class ToolbarPreviewAdapter extends BaseAdapter {
 		}
 		if (lq == null) {
 			lq = Bitmap.createBitmap(mPreviewSize.x, mPreviewSize.y, Bitmap.Config.ARGB_8888);
+			//TODO
 			mCore.drawSinglePage(position, lq, mPreviewSize.x, mPreviewSize.y);
 			
 			//optimize bitmap format for thumbnails

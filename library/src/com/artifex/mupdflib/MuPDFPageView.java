@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Build;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
@@ -573,19 +574,59 @@ public class MuPDFPageView extends PageView implements MuPDFView {
 		return true;
 	}
 
-	@Override
+	
+	/*
 	protected void drawPage(Bitmap bm, int sizeX, int sizeY, int patchX, int patchY,
 			int patchWidth, int patchHeight) {
 		mCore.drawPage(bm, mPageNumber, sizeX, sizeY, patchX, patchY,
 				patchWidth, patchHeight);
 	}
-
+	*/
 	@Override
+	protected CancellableTaskDefinition<Void, Void> getDrawPageTask(final Bitmap bm, final int sizeX, final int sizeY,
+			final int patchX, final int patchY, final int patchWidth, final int patchHeight) {
+		return new MuPDFCancellableTaskDefinition<Void, Void>(mCore) {
+			@Override
+			public Void doInBackground(MuPDFCore.Cookie cookie, Void ... params) {
+				// Workaround bug in Android Honeycomb 3.x, where the bitmap generation count
+				// is not incremented when drawing.
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB &&
+						Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+					bm.eraseColor(0);
+				mCore.drawPage(bm, mPageNumber, sizeX, sizeY, patchX, patchY, patchWidth, patchHeight, cookie);
+				return null;
+			}
+		};
+
+	}
+
+	
+	/*
 	protected void updatePage(Bitmap bm, int sizeX, int sizeY,
 			int patchX, int patchY, int patchWidth, int patchHeight) {
 		mCore.updatePage(bm, mPageNumber, sizeX, sizeY, patchX, patchY,
 				patchWidth, patchHeight);
 	}
+	*/
+	@Override
+	protected CancellableTaskDefinition<Void, Void> getUpdatePageTask(final Bitmap bm, final int sizeX, final int sizeY,
+			final int patchX, final int patchY, final int patchWidth, final int patchHeight)
+	{
+		return new MuPDFCancellableTaskDefinition<Void, Void>(mCore) {
+
+			@Override
+			public Void doInBackground(MuPDFCore.Cookie cookie, Void ... params) {
+				// Workaround bug in Android Honeycomb 3.x, where the bitmap generation count
+				// is not incremented when drawing.
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB &&
+						Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+					bm.eraseColor(0);
+				mCore.updatePage(bm, mPageNumber, sizeX, sizeY, patchX, patchY, patchWidth, patchHeight, cookie);
+				return null;
+			}
+		};
+	}
+
 
 	@Override
 	protected LinkInfo[] getLinkInfo() {
