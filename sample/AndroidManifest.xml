@@ -26,14 +26,17 @@
         
 		<activity 
 		    android:name="com.artifex.mupdflib.MuPDFActivity"
+		    android:theme="@android:style/Theme.NoTitleBar"
 			android:label="@string/app_name">
     	</activity>
         <activity
             android:name="com.artifex.mupdflib.PrintDialogActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:label="@string/print">
         </activity>
 		<activity
             android:name="com.artifex.mupdflib.PDFPreviewGridActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:label="preview label">
         </activity>
     </application>

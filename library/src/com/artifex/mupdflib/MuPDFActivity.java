@@ -551,8 +551,10 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 		Intent intent = getIntent();
 		boolean idleenabled = intent.getBooleanExtra("idleenabled", false);
 		boolean highlight = intent.getBooleanExtra("linkhighlight", false);
+		boolean horizontalscrolling = intent.getBooleanExtra("horizontalscrolling", true);
 		mDocView.setKeepScreenOn(!idleenabled);
 		mDocView.setLinksHighlighted(highlight);
+		mDocView.setScrollingDirectionHorizontal(horizontalscrolling);
 		mDocName = intent.getStringExtra("docname");
 		
 		mSearchTask = new SearchTask(this, core) {

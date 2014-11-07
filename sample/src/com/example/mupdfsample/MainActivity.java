@@ -53,16 +53,19 @@ public class MainActivity extends Activity implements OnClickListener {
 			intent.setData(uri);
 			
 			//if document protected with password
-			intent.putExtra("password", "PDF document password");
+			intent.putExtra("password", "encrypted PDF password");
 
 			//if you need highlight link boxes
 			intent.putExtra("linkhighlight", true);
 
 			//if you don't need device sleep on reading document
 			intent.putExtra("idleenabled", false);
+			
+			//set true value for horizontal page scrolling, false value for vertical page scrolling
+			intent.putExtra("horizontalscrolling", true);
 
 			//document name
-			intent.putExtra("docname", "PDF document file name");
+			intent.putExtra("docname", "PDF document name");
 			
 			startActivity(intent);
 		}

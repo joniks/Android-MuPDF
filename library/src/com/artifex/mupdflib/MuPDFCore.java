@@ -225,10 +225,8 @@ public class MuPDFCore {
 		drawPage(bitmap, pageW, pageH, patchX, patchY, patchW, patchH, 0);
 	}
 	
-	public synchronized void drawSinglePage(int page, Bitmap bitmap, int pageW,
-			int pageH) {
-
-				drawPageSynchrinized(page, bitmap, pageW, pageH, 0, 0, pageW, pageH);
+	public synchronized void drawSinglePage(int page, Bitmap bitmap, int pageW, int pageH) {
+		drawPageSynchrinized(page, bitmap, pageW, pageH, 0, 0, pageW, pageH);
 	}
 	
 	public synchronized void drawPage(Bitmap bm, int page, int pageW, int pageH,
@@ -271,12 +269,9 @@ public class MuPDFCore {
 					// draw only left page
 					canvas.drawColor(Color.BLACK);
 					if (leftBmWidth > 0) {
-						Bitmap leftBm = Bitmap.createBitmap(leftBmWidth, patchH,
-								getBitmapConfig());
+						Bitmap leftBm = Bitmap.createBitmap(leftBmWidth, patchH, getBitmapConfig());
 						gotoPage(drawPage);
-						drawPage(leftBm, leftPageW, pageH,
-								(leftBmWidth == 0) ? patchX - leftPageW : 0,
-								patchY, leftBmWidth, patchH, cookie.cookiePtr);
+						drawPage(leftBm, leftPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, leftBmWidth, patchH, cookie.cookiePtr);
 						Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
 						canvas.drawBitmap(leftBm, 0, 0, paint);
 						leftBm.recycle();
@@ -285,12 +280,9 @@ public class MuPDFCore {
 					// draw only right page
 					canvas.drawColor(Color.BLACK);
 					if (rightBmWidth > 0) {
-						Bitmap rightBm = Bitmap.createBitmap(rightBmWidth, patchH,
-								getBitmapConfig());
+						Bitmap rightBm = Bitmap.createBitmap(rightBmWidth, patchH, getBitmapConfig());
 						gotoPage(drawPage);
-						drawPage(rightBm, rightPageW, pageH,
-								(leftBmWidth == 0) ? patchX - leftPageW : 0,
-								patchY, rightBmWidth, patchH, cookie.cookiePtr);
+						drawPage(rightBm, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
 						Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
 						canvas.drawBitmap(rightBm, leftBmWidth, 0, paint);
 						rightBm.recycle();
@@ -301,24 +293,17 @@ public class MuPDFCore {
 //					canvas.drawColor(Color.BLACK);
 					Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
 					if (leftBmWidth > 0) {
-						Bitmap leftBm = Bitmap.createBitmap(leftBmWidth,
-								patchH, getBitmapConfig());
+						Bitmap leftBm = Bitmap.createBitmap(leftBmWidth, patchH, getBitmapConfig());
 						gotoPage(drawPage);
-						drawPage(leftBm, leftPageW, pageH, patchX, patchY,
-								leftBmWidth, patchH, cookie.cookiePtr);
+						drawPage(leftBm, leftPageW, pageH, patchX, patchY, leftBmWidth, patchH, cookie.cookiePtr);
 						canvas.drawBitmap(leftBm, 0, 0, paint);
 						leftBm.recycle();
 					}
 					if (rightBmWidth > 0) {
-						Bitmap rightBm = Bitmap.createBitmap(rightBmWidth,
-								patchH, getBitmapConfig());
+						Bitmap rightBm = Bitmap.createBitmap(rightBmWidth, patchH, getBitmapConfig());
 						gotoPage(drawPage+1);
-						drawPage(rightBm, rightPageW, pageH,
-								(leftBmWidth == 0) ? patchX - leftPageW : 0,
-								patchY, rightBmWidth, patchH, cookie.cookiePtr);
-
-						canvas.drawBitmap(rightBm, (float) leftBmWidth, 0,
-								paint);
+						drawPage(rightBm, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
+						canvas.drawBitmap(rightBm, (float) leftBmWidth, 0, paint);
 						rightBm.recycle();
 					}
 
@@ -367,9 +352,7 @@ public class MuPDFCore {
 //					canvas.drawColor(Color.BLACK);
 					if (leftBmWidth > 0) {
 						Bitmap leftBm = Bitmap.createBitmap(bm, 0, 0, leftBmWidth, patchH);
-						updatePageInternal(leftBm, page, leftPageW, pageH,
-								(leftBmWidth == 0) ? patchX - leftPageW : 0,
-								patchY, leftBmWidth, patchH, cookie.cookiePtr);
+						updatePageInternal(leftBm, page, leftPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, leftBmWidth, patchH, cookie.cookiePtr);
 						Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
 						canvas.drawBitmap(leftBm, 0, 0, paint);
 						leftBm.recycle();
@@ -380,9 +363,7 @@ public class MuPDFCore {
 					if (rightBmWidth > 0) {
 						Bitmap rightBm = Bitmap.createBitmap(bm, leftBmWidth, 0, rightBmWidth, patchH);
 						gotoPage(page);
-						updatePageInternal(rightBm, page, rightPageW, pageH,
-								(leftBmWidth == 0) ? patchX - leftPageW : 0,
-								patchY, rightBmWidth, patchH, cookie.cookiePtr);
+						updatePageInternal(rightBm, page, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
 						Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
 						canvas.drawBitmap(rightBm, leftBmWidth, 0, paint);
 						rightBm.recycle();
@@ -393,22 +374,15 @@ public class MuPDFCore {
 //					canvas.drawColor(Color.BLACK);
 					Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
 					if (leftBmWidth > 0) {
-						Bitmap leftBm = Bitmap.createBitmap(bm, 0, 0, (leftBmWidth < bm.getWidth()) ? leftBmWidth : bm.getWidth(),
-								patchH);
-						updatePageInternal(leftBm, page, leftPageW, pageH, patchX, patchY,
-								leftBmWidth, patchH, cookie.cookiePtr);
+						Bitmap leftBm = Bitmap.createBitmap(bm, 0, 0, (leftBmWidth < bm.getWidth()) ? leftBmWidth : bm.getWidth(), patchH);
+						updatePageInternal(leftBm, page, leftPageW, pageH, patchX, patchY, leftBmWidth, patchH, cookie.cookiePtr);
 						canvas.drawBitmap(leftBm, 0, 0, paint);
 						leftBm.recycle();
 					}
 					if (rightBmWidth > 0) {
-						Bitmap rightBm = Bitmap.createBitmap(bm, leftBmWidth, 0, rightBmWidth,
-								patchH);
-						updatePageInternal(rightBm, page, rightPageW, pageH,
-								(leftBmWidth == 0) ? patchX - leftPageW : 0,
-								patchY, rightBmWidth, patchH, cookie.cookiePtr);
-
-						canvas.drawBitmap(rightBm, (float) leftBmWidth, 0,
-								paint);
+						Bitmap rightBm = Bitmap.createBitmap(bm, leftBmWidth, 0, rightBmWidth, patchH);
+						updatePageInternal(rightBm, page, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
+						canvas.drawBitmap(rightBm, (float) leftBmWidth, 0, paint);
 						rightBm.recycle();
 					}
 
@@ -422,8 +396,7 @@ public class MuPDFCore {
 		}
 	}
 
-	public synchronized PassClickResult passClickEvent(int page, float x,
-			float y) {
+	public synchronized PassClickResult passClickEvent(int page, float x, float y) {
 		boolean changed = passClickEventInternal(page, x, y) != 0;
 
 		switch (WidgetType.values()[getFocusedWidgetTypeInternal()]) {
@@ -558,8 +531,7 @@ public class MuPDFCore {
 		return lns.toArray(new TextWord[lns.size()][]);
 	}
 
-	public synchronized void addMarkupAnnotation(int page, PointF[] quadPoints,
-			Annotation.Type type) {
+	public synchronized void addMarkupAnnotation(int page, PointF[] quadPoints, Annotation.Type type) {
 		gotoPage(page);
 		addMarkupAnnotationInternal(quadPoints, type.ordinal());
 	}
