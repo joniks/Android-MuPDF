@@ -1017,12 +1017,16 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 			return;
 		String pageStr = "";
 		if (core.getDisplayPages() == 2 && index!=0 && index!=core.countPages()-1) {
-			pageStr = String.format("%1$d-%2$d", (index*2)-2, (index*2)-1);
-			mPageNumberView.setText(String.format(getString(R.string.two_pages_of_count), (index*2)-2, (index*2)-1, core.countSinglePages()));
+			pageStr = String.format("%1$d-%2$d", (index*2), (index*2)+1);
+			mPageNumberView.setText(String.format(getString(R.string.two_pages_of_count), (index*2), (index*2)+1, core.countSinglePages()));
 		}
-		else if (core.getDisplayPages() == 2 && (index==0 || index==core.countPages()-1)) {
+		else if (core.getDisplayPages() == 2 && index==0) {
 			pageStr = String.format("%1$d", index+1);
 			mPageNumberView.setText(String.format(getString(R.string.one_page_of_count), index+1, core.countSinglePages()));
+		}
+		else if (core.getDisplayPages() == 2 && index==core.countPages()-1) {
+			pageStr = String.format("%1$d", (index*2));
+			mPageNumberView.setText(String.format(getString(R.string.one_page_of_count), (index*2), core.countSinglePages()));
 		}
 		else {
 			pageStr = String.format("%1$d", index+1);
