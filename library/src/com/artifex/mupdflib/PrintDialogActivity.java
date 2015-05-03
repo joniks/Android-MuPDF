@@ -1,11 +1,14 @@
 package com.artifex.mupdflib;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -39,10 +42,17 @@ public class PrintDialogActivity extends Activity {
 
 	private int resultCode;
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+	        getWindow().setStatusBarColor(getResources().getColor(R.color.actionbar_background_dark));
+	        getWindow().setNavigationBarColor(getResources().getColor(R.color.actionbar_background_dark));
+	    }
+		
 		resultCode = RESULT_OK;
 		setContentView(R.layout.print_dialog);
 		dialogWebView = (WebView) findViewById(R.id.webview);

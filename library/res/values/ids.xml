@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="actionbar_background" type="color"/>
+    <item name="actionbar_background_semitransp" type="color"/>
+    <item name="actionbar_background_dark" type="color"/>
+    <item name="actionbar_tint" type="color"/>
+    
+    <item name="ic_back_api" type="drawable"/>
+    <item name="ic_search_api" type="drawable"/>
+    <item name="ic_arrow_left_api" type="drawable"/>
+    <item name="ic_arrow_right_api" type="drawable"/>
+    <item name="ic_email_api" type="drawable"/>
+    <item name="ic_more_api" type="drawable"/>
+    <item name="ic_print_api" type="drawable"/>
+    
+</resources>

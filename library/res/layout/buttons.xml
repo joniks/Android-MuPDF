@@ -15,7 +15,7 @@
 			android:id="@+id/topBar0Main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/toolbar" >
+            android:background="@color/actionbar_background_semitransp" >
             
             <ImageButton
                 android:id="@+id/closeReader"
@@ -23,13 +23,37 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
+                android:padding="12dip"
                 android:contentDescription="@string/cancel"
                 android:background="@drawable/button"
                 android:onClick="OnCloseReaderButtonClick"
-                android:src="@drawable/ic_cancel" />
+                android:src="@drawable/ic_back_api" />
 
+            <ImageButton
+                android:id="@+id/moreButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/closeReader"
+                android:padding="12dip"
+                android:contentDescription="@string/more"
+				android:background="@drawable/button"
+				android:onClick="OnMoreButtonClick"
+                android:src="@drawable/ic_more_api" />
+            
+            <ImageButton
+                android:id="@+id/searchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/moreButton"
+                android:padding="12dip"
+                android:contentDescription="@string/search_document"
+                android:background="@drawable/button"
+                android:src="@drawable/ic_search_api" />
 
-
+            
+<!--  
             <ImageButton
                 android:id="@+id/searchButton"
                 android:layout_width="wrap_content"
@@ -38,7 +62,7 @@
                 android:layout_toLeftOf="@+id/moreButton"
                 android:contentDescription="@string/search_document"
                 android:background="@drawable/button"
-                android:src="@drawable/ic_magnifying_glass" />
+                android:src="@drawable/ic_search" />
 
             <ImageButton
                 android:id="@+id/moreButton"
@@ -50,14 +74,14 @@
 				android:background="@drawable/button"
 				android:onClick="OnMoreButtonClick"
                 android:src="@drawable/ic_more" />
-
+-->
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/topBar1Search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/toolbar" >
+            android:background="@color/actionbar_background_semitransp" >
 
             <ImageButton
                 android:id="@+id/cancelSearch"
@@ -65,10 +89,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
+                android:padding="12dip"
                 android:contentDescription="@string/cancel"
                 android:background="@drawable/button"
                 android:onClick="OnCancelSearchButtonClick"
-                android:src="@drawable/ic_cancel" />
+                android:src="@drawable/ic_back_api" />
 
             <EditText
                 android:id="@+id/searchText"
@@ -88,9 +113,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/searchForward"
+                android:padding="12dip"
                 android:contentDescription="@string/search_backwards"
                 android:background="@drawable/button"
-                android:src="@drawable/ic_arrow_left" />
+                android:src="@drawable/ic_arrow_left_api" />
 
             <ImageButton
                 android:id="@+id/searchForward"
@@ -98,9 +124,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
+                android:padding="12dip"
                 android:contentDescription="@string/search_forwards"
                 android:background="@drawable/button"
-                android:src="@drawable/ic_arrow_right" />
+                android:src="@drawable/ic_arrow_right_api" />
 
         </RelativeLayout>
 
@@ -109,7 +136,7 @@
             android:id="@+id/topBar4More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/toolbar" >
+            android:background="@color/actionbar_background_semitransp" >
 
             <ImageButton
                 android:id="@+id/cancelMoreButton"
@@ -117,23 +144,24 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
+                android:padding="12dip"
                 android:contentDescription="@string/cancel"
                 android:background="@drawable/button"
                 android:onClick="OnCancelMoreButtonClick"
-                android:src="@drawable/ic_cancel" />
+                android:src="@drawable/ic_back_api" />
 
             <ImageButton
                 android:id="@+id/printButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                
                 android:layout_alignParentRight="true"
                 android:layout_alignWithParentIfMissing="true"
+                android:padding="12dip"
                 android:contentDescription="@string/print"
                 android:background="@drawable/button"
                 android:onClick="OnPrintButtonClick"
-                android:src="@drawable/ic_print" />
+                android:src="@drawable/ic_print_api" />
 
 
 
@@ -155,7 +183,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="0dp"
-            android:background="@color/bar" >
+            android:background="@color/actionbar_background_semitransp" >
         </FrameLayout>
 
         <TextView

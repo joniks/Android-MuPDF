@@ -11,9 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 public class MuPDFReaderView extends ReaderView {
-	enum Mode {
-		Viewing, Selecting, Drawing
-	}
+	public enum Mode {Viewing, Selecting, Drawing}
+	//enum Mode {Viewing, Selecting, Drawing}
 
 	private final Context mContext;
 	private boolean mLinksHighlighted = false;

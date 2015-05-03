@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
 
     <string name="cancel">Cancel</string>
     <string name="search_backwards">Search backwards</string>
@@ -28,5 +28,5 @@
     
 	<string name="one_page_of_count">%1$d of %2$d</string>
 	<string name="two_pages_of_count">%1$d-%2$d of %3$d</string>
-
+	
 </resources>

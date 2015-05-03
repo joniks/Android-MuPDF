@@ -1,0 +1,11 @@
+<resources>
+
+
+	
+    <style name="AppReaderTheme" parent="@android:style/Theme.NoTitleBar">
+        <!--  <item name="android:windowBackground">@drawable/tiled_background</item> -->
+        <item name="android:windowBackground">@android:color/darker_gray</item>
+	</style>
+	
+
+</resources>

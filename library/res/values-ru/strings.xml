@@ -1,0 +1,32 @@
+﻿<resources>
+
+    <string name="cancel">Отменить</string>
+    <string name="search_backwards">Искать предыдущее</string>
+    <string name="search_forwards">Искать следующее</string>
+    <string name="search_document">Искать в документе</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="text_not_found">Текст не найден</string>
+    <string name="searching_">Поиск&#8230;</string>
+    <string name="no_further_occurrences_found">Не найдены другие случаи</string>
+    <string name="search">Искать</string>
+    <string name="print">Печатать</string>
+    <string name="dismiss">Игнорировать</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="print_failed">Распечатать не удалось</string>
+    <string name="document_has_changes_save_them_">Изменения документа. Сохранить?</string>
+    <string name="cannot_open_document">Не удалось открыть документ</string>
+    <string name="cannot_open_document_Reason">Не удалось открыть документ: %1$s</string>
+    <string name="cannot_open_file_Path">Не удалось открыть файл: %1$s</string>
+    <string name="cannot_open_buffer">Невозможно открыть буфер</string>
+    <string name="fill_out_text_field">Заполните текстовое поле</string>
+    <string name="okay">ОК</string>
+    <string name="choose_value">Выберите значение</string>
+    <string name="not_supported">Не поддерживается</string>
+    <string name="more">Больше</string>
+    <string name="format_currently_not_supported">Формат в настоящее время не поддерживается</string>
+	
+	<string name="one_page_of_count">%1$d из %2$d</string>
+	<string name="two_pages_of_count">%1$d-%2$d из %3$d</string>
+	
+</resources>

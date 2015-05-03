@@ -12,6 +12,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
@@ -283,11 +285,17 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 	
 	
 	/** Called when the activity is first created. */
-	@SuppressLint("StringFormatMatches")
+	@SuppressLint({ "StringFormatMatches", "NewApi" })
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+	        getWindow().setStatusBarColor(getResources().getColor(R.color.actionbar_background_dark));
+	        getWindow().setNavigationBarColor(getResources().getColor(R.color.actionbar_background_dark));
+	    }
+		
 		LibraryUtils.reloadLocale(getApplicationContext());
 		
 		mAlertBuilder = new AlertDialog.Builder(this);
@@ -416,7 +424,12 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 					core = openBuffer(buffer, intent.getType());
 
 				} else {
-					core = openFile(Uri.decode(uri.getEncodedPath()));
+					//core = openFile(Uri.decode(uri.getEncodedPath()));
+					String path = Uri.decode(uri.getEncodedPath());
+					if (path == null) {
+						path = uri.toString();
+					}
+					core = openFile(path);
 				}
 				SearchTaskResult.set(null);
 				if (core.countPages() == 0)
@@ -880,7 +893,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 
 	private void setButtonEnabled(ImageButton button, boolean enabled) {
 		button.setEnabled(enabled);
-		button.setColorFilter(enabled ? Color.argb(255, 255, 255, 255) : Color
+		button.setColorFilter(enabled ? Color.argb(0, 255, 255, 255) : Color
 				.argb(255, 128, 128, 128));
 	}
 	/*

@@ -265,14 +265,20 @@ public class MuPDFCore {
 				// set the right part of the patch width, as a rest of the patch
 				int rightBmWidth = patchW - leftBmWidth;
 
+				Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+				
 				if (drawPage == numPages - 1) {
 					// draw only left page
 					canvas.drawColor(Color.BLACK);
 					if (leftBmWidth > 0) {
-						Bitmap leftBm = Bitmap.createBitmap(leftBmWidth, patchH, getBitmapConfig());
+						Bitmap leftBm = Bitmap.createBitmap(leftBmWidth, patchH, Config.ARGB_8888);
 						gotoPage(drawPage);
 						drawPage(leftBm, leftPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, leftBmWidth, patchH, cookie.cookiePtr);
-						Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+						
+						//optimize bitmap format
+						//Bitmap leftBmRGB = leftBm.copy(Bitmap.Config.RGB_565, true);
+						//if (leftBmRGB == null) throw new RuntimeException("bitmap copy failed");
+						
 						canvas.drawBitmap(leftBm, 0, 0, paint);
 						leftBm.recycle();
 					}
@@ -280,29 +286,42 @@ public class MuPDFCore {
 					// draw only right page
 					canvas.drawColor(Color.BLACK);
 					if (rightBmWidth > 0) {
-						Bitmap rightBm = Bitmap.createBitmap(rightBmWidth, patchH, getBitmapConfig());
+						Bitmap rightBm = Bitmap.createBitmap(rightBmWidth, patchH, Config.ARGB_8888);
 						gotoPage(drawPage);
 						drawPage(rightBm, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
-						Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
-						canvas.drawBitmap(rightBm, leftBmWidth, 0, paint);
+						
+						//optimize bitmap format
+						//Bitmap rightBmRGB = rightBm.copy(Bitmap.Config.RGB_565, true);
+						//if (rightBmRGB == null) throw new RuntimeException("bitmap copy failed");
+						
+						canvas.drawBitmap(rightBm, (float) leftBmWidth, 0, paint);
 						rightBm.recycle();
 					}
 				} else {
 					// Need to draw two pages one by one: left and right
-					Log.d("bitmap width", "" + bm.getWidth());
-//					canvas.drawColor(Color.BLACK);
-					Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+					Log.d("draw bitmap width", "" + bm.getWidth());
+					//canvas.drawColor(Color.BLACK);
 					if (leftBmWidth > 0) {
-						Bitmap leftBm = Bitmap.createBitmap(leftBmWidth, patchH, getBitmapConfig());
+						Bitmap leftBm = Bitmap.createBitmap(leftBmWidth, patchH, Config.ARGB_8888);
 						gotoPage(drawPage);
 						drawPage(leftBm, leftPageW, pageH, patchX, patchY, leftBmWidth, patchH, cookie.cookiePtr);
+						
+						//optimize bitmap format
+						//Bitmap leftBmRGB = leftBm.copy(Bitmap.Config.RGB_565, true);
+						//if (leftBmRGB == null) throw new RuntimeException("bitmap copy failed");
+						
 						canvas.drawBitmap(leftBm, 0, 0, paint);
 						leftBm.recycle();
 					}
 					if (rightBmWidth > 0) {
-						Bitmap rightBm = Bitmap.createBitmap(rightBmWidth, patchH, getBitmapConfig());
+						Bitmap rightBm = Bitmap.createBitmap(rightBmWidth, patchH, Config.ARGB_8888);
 						gotoPage(drawPage+1);
 						drawPage(rightBm, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
+						
+						//optimize bitmap format
+						//Bitmap rightBmRGB = rightBm.copy(Bitmap.Config.RGB_565, true);
+						//if (rightBmRGB == null) throw new RuntimeException("bitmap copy failed");
+						
 						canvas.drawBitmap(rightBm, (float) leftBmWidth, 0, paint);
 						rightBm.recycle();
 					}
@@ -347,41 +366,56 @@ public class MuPDFCore {
 				// set the right part of the patch width, as a rest of the patch
 				int rightBmWidth = patchW - leftBmWidth;
 
+				Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+				
 				if (page == numPages - 1) {
 					// draw only left page
-//					canvas.drawColor(Color.BLACK);
 					if (leftBmWidth > 0) {
 						Bitmap leftBm = Bitmap.createBitmap(bm, 0, 0, leftBmWidth, patchH);
 						updatePageInternal(leftBm, page, leftPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, leftBmWidth, patchH, cookie.cookiePtr);
-						Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+						
+						//optimize bitmap format
+						//Bitmap leftBmRGB = leftBm.copy(Bitmap.Config.RGB_565, true);
+						//if (leftBmRGB == null) throw new RuntimeException("bitmap copy failed");
+						
 						canvas.drawBitmap(leftBm, 0, 0, paint);
 						leftBm.recycle();
 					}
 				} else if (page == 0) {
 					// draw only right page
-//					canvas.drawColor(Color.BLACK);
 					if (rightBmWidth > 0) {
 						Bitmap rightBm = Bitmap.createBitmap(bm, leftBmWidth, 0, rightBmWidth, patchH);
-						gotoPage(page);
 						updatePageInternal(rightBm, page, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
-						Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
-						canvas.drawBitmap(rightBm, leftBmWidth, 0, paint);
+						
+						//optimize bitmap format
+						//Bitmap rightBmRGB = rightBm.copy(Bitmap.Config.RGB_565, true);
+						//if (rightBmRGB == null) throw new RuntimeException("bitmap copy failed");
+						
+						canvas.drawBitmap(rightBm, (float) leftBmWidth, 0, paint);
 						rightBm.recycle();
 					}
 				} else {
 					// Need to draw two pages one by one: left and right
-					Log.d("bitmap width", "" + bm.getWidth());
-//					canvas.drawColor(Color.BLACK);
-					Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+					Log.d("update bitmap width", "" + bm.getWidth());
 					if (leftBmWidth > 0) {
 						Bitmap leftBm = Bitmap.createBitmap(bm, 0, 0, (leftBmWidth < bm.getWidth()) ? leftBmWidth : bm.getWidth(), patchH);
 						updatePageInternal(leftBm, page, leftPageW, pageH, patchX, patchY, leftBmWidth, patchH, cookie.cookiePtr);
+						
+						//optimize bitmap format
+						//Bitmap leftBmRGB = leftBm.copy(Bitmap.Config.RGB_565, true);
+						//if (leftBmRGB == null) throw new RuntimeException("bitmap copy failed");
+						
 						canvas.drawBitmap(leftBm, 0, 0, paint);
 						leftBm.recycle();
 					}
 					if (rightBmWidth > 0) {
 						Bitmap rightBm = Bitmap.createBitmap(bm, leftBmWidth, 0, rightBmWidth, patchH);
-						updatePageInternal(rightBm, page, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
+						updatePageInternal(rightBm, page+1, rightPageW, pageH, (leftBmWidth == 0) ? patchX - leftPageW : 0, patchY, rightBmWidth, patchH, cookie.cookiePtr);
+						
+						//optimize bitmap format
+						//Bitmap rightBmRGB = rightBm.copy(Bitmap.Config.RGB_565, true);
+						//if (rightBmRGB == null) throw new RuntimeException("bitmap copy failed");
+						
 						canvas.drawBitmap(rightBm, (float) leftBmWidth, 0, paint);
 						rightBm.recycle();
 					}
@@ -572,10 +606,6 @@ public class MuPDFCore {
 	
 	public int getDisplayPages() {
 		return displayPages;
-	}
-	
-	private Config getBitmapConfig(){
-		return Config.ARGB_8888;
 	}
 	
 	public int countDisplays() {

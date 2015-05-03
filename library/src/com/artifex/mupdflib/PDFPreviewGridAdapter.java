@@ -3,12 +3,16 @@ package com.artifex.mupdflib;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.*;
+import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,7 +35,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 	private int mPosition;
 
 	private Point mPreviewSize;
-	private final SparseArray<Bitmap> mBitmapCache = new SparseArray<Bitmap>();
+	//private final SparseArray<Bitmap> mBitmapCache = new SparseArray<Bitmap>();
 	private String mPath;
 
 	private int currentlyViewing;
@@ -49,8 +53,14 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 
 		mPath = documentCache.toString() + File.separator;
 
-		mLoadingBitmap = BitmapFactory.decodeResource(mContext.getResources(),
-				R.drawable.darkdenim3);
+		setPreviewSize();
+		
+		mLoadingBitmap = Bitmap.createBitmap(mPreviewSize.x, mPreviewSize.y, Bitmap.Config.RGB_565);
+	    Canvas canvas = new Canvas(mLoadingBitmap);
+	    canvas.drawColor(Color.WHITE);
+		
+		//mLoadingBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.color.white);
+
 	}
 
 	@Override
@@ -153,17 +163,10 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 
 		@Override
 		protected Bitmap doInBackground(Integer... params) {
-			if (mPreviewSize == null) {
-				mPreviewSize = new Point();
-				int padding = mContext.getResources().getDimensionPixelSize(R.dimen.preview_height);
-				PointF mPageSize = mCore.getSinglePageSize(0);
-				float scale = mPageSize.y / mPageSize.x;
-				mPreviewSize.x = (int) ((float) padding / scale);
-				mPreviewSize.y = padding;
-			}
+			setPreviewSize();
 			Bitmap lq = null;
 			lq = getCachedBitmap(position);
-			mBitmapCache.put(position, lq);
+			//mBitmapCache.put(position, lq);
 			return lq;
 		}
 
@@ -179,6 +182,7 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 					final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(holder.previewPageImageView);
 					if (this == bitmapWorkerTask && holder != null) {
 						holder.previewPageImageView.setImageBitmap(bitmap);
+
 						holder.previewPageProgress.setVisibility(ProgressBar.GONE);
 						// holder.previewPageNumber.setText(String.valueOf(position + 1));
 
@@ -214,6 +218,13 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 			lq = Bitmap.createBitmap(mPreviewSize.x, mPreviewSize.y, Bitmap.Config.ARGB_8888);
 			//TODO
 			mCore.drawSinglePage(position, lq, mPreviewSize.x, mPreviewSize.y);
+			
+			//optimize bitmap format for thumbnails
+			Bitmap btmp = lq.copy(Bitmap.Config.RGB_565, true);
+			if (btmp == null) throw new RuntimeException("bitmap copy failed");
+			lq.recycle();
+			lq = btmp;
+			
 			try {
 				lq.compress(CompressFormat.JPEG, 70, new FileOutputStream(mCachedBitmapFile));
 			} catch (FileNotFoundException e) {
@@ -224,10 +235,21 @@ public class PDFPreviewGridAdapter extends BaseAdapter {
 		return lq;
 	}
 
+	private void setPreviewSize() {
+		if (mPreviewSize == null) {
+			mPreviewSize = new Point();
+			int padding = mContext.getResources().getDimensionPixelSize(R.dimen.preview_height);
+			PointF mPageSize = mCore.getSinglePageSize(0);
+			float scale = mPageSize.y / mPageSize.x;
+			mPreviewSize.x = (int) ((float) padding / scale);
+			mPreviewSize.y = padding;
+		}
+	}
+	
 	public int getCurrentlyViewing() {
 		return currentlyViewing;
 	}
-
+	
 	public void setCurrentlyViewing(int currentlyViewing) {
 		this.currentlyViewing = currentlyViewing;
 		notifyDataSetChanged();

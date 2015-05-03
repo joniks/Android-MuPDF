@@ -2,12 +2,16 @@ package com.artifex.mupdflib;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.*;
+import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +31,7 @@ public class ToolbarPreviewAdapter extends BaseAdapter {
 	private MuPDFCore mCore;
 
 	private Point mPreviewSize;
-	private final SparseArray<Bitmap> mBitmapCache = new SparseArray<Bitmap>();
+	//private final SparseArray<Bitmap> mBitmapCache = new SparseArray<Bitmap>();
 	private String mPath;
 
 	private int currentlyViewing;
@@ -44,8 +48,13 @@ public class ToolbarPreviewAdapter extends BaseAdapter {
 
 		mPath = documentCache.toString() + File.separator;
 
-		mLoadingBitmap = BitmapFactory.decodeResource(mContext.getResources(),
-				R.drawable.darkdenim3);
+		setPreviewSize();
+		
+		mLoadingBitmap = Bitmap.createBitmap(mPreviewSize.x, mPreviewSize.y, Bitmap.Config.RGB_565);
+	    Canvas canvas = new Canvas(mLoadingBitmap);
+	    canvas.drawColor(Color.WHITE);
+	    
+		//mLoadingBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.color.white);
 	}
 
 	@Override
@@ -140,17 +149,10 @@ public class ToolbarPreviewAdapter extends BaseAdapter {
 
 		@Override
 		protected Bitmap doInBackground(Integer... params) {
-			if (mPreviewSize == null) {
-				mPreviewSize = new Point();
-				int padding = mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height)-4;
-				PointF mPageSize = mCore.getSinglePageSize(0);
-				float scale = mPageSize.y / mPageSize.x;
-				mPreviewSize.x = (int) ((float) padding / scale);
-				mPreviewSize.y = padding;
-			}
+			setPreviewSize();
 			Bitmap lq = null;
 			lq = getCachedBitmap(position);
-			mBitmapCache.put(position, lq);
+			//mBitmapCache.put(position, lq);
 			return lq;
 		}
 
@@ -166,8 +168,8 @@ public class ToolbarPreviewAdapter extends BaseAdapter {
 					final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(holder.previewPageImageView);
 					if (this == bitmapWorkerTask && holder != null) {
 						holder.previewPageImageView.setImageBitmap(bitmap);
-						// holder.previewPageNumber.setText(String.valueOf(position
-						// + 1));
+
+						// holder.previewPageNumber.setText(String.valueOf(position + 1));
 						if (getCurrentlyViewing() == position || (mCore.getDisplayPages() == 2 && getCurrentlyViewing() == position - 1)) {
 							holder.previewPageLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.thumbnail_selected_background));
 						} else {
@@ -217,6 +219,17 @@ public class ToolbarPreviewAdapter extends BaseAdapter {
 		return lq;
 	}
 
+	private void setPreviewSize() {
+		if (mPreviewSize == null) {
+			mPreviewSize = new Point();
+			int padding = mContext.getResources().getDimensionPixelSize(R.dimen.toolbar_height)-4;
+			PointF mPageSize = mCore.getSinglePageSize(0);
+			float scale = mPageSize.y / mPageSize.x;
+			mPreviewSize.x = (int) ((float) padding / scale);
+			mPreviewSize.y = padding;
+		}
+	}
+	
 	public int getCurrentlyViewing() {
 		return currentlyViewing;
 	}

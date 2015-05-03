@@ -6,5 +6,5 @@
         android:right="16dp"
         android:top="16dp"
         android:bottom="16dp" />
-    <solid android:color="@color/busy_indicator" />
+    <solid android:color="@color/actionbar_background_semitransp" />
 </shape>
