@@ -13,7 +13,7 @@ public class LibraryUtils {
     public static void reloadLocale(Context context)
     {    	
     	SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        String lang = sharedPrefs.getString(PREF_APP_LANGUAGE, "lv");
+        String lang = sharedPrefs.getString(PREF_APP_LANGUAGE, Locale.getDefault().getLanguage());
         if (sharedPrefs.getString(PREF_APP_LANGUAGE, "").equalsIgnoreCase("")) {
         	sharedPrefs.edit().putString(PREF_APP_LANGUAGE, lang).commit();
         }
