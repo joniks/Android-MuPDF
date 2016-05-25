@@ -13,12 +13,26 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements OnClickListener {
 	private static final String TEST_FILE_NAME = "sample.pdf";
+	
+	public String getDirectoryPathById(final Integer recordId) {
+		if (recordId == null)
+			return "";
+
+		final String fullRecordId = String.format("%010d", recordId);
+		final StringBuilder result = new StringBuilder();
+		for (int i = 0; i <= fullRecordId.length() - 2; i = i + 2)
+			result.append(fullRecordId.substring(i, i + 2)).append(File.separator);
+
+		return result.toString();
+	}	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,6 +48,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		Button bt = (Button)findViewById(R.id.button1);
         bt.setOnClickListener(this);
+        
+        Log.e("asadasdadsa", "59057: "+getDirectoryPathById(59057)+", 58492: "+getDirectoryPathById(58492));
 	}
 
 	@Override

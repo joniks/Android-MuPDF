@@ -1,8 +1,13 @@
 package com.artifex.mupdflib;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.util.Log;
 
 import java.io.File;
@@ -10,8 +15,21 @@ import java.util.ArrayList;
 
 public class MuPDFCore {
 	/* load our native library */
+	private static boolean gs_so_available = false;
 	static {
-		System.loadLibrary("mupdf");
+		System.out.println("Loading dll");
+		System.loadLibrary("mupdf_java");
+		System.out.println("Loaded dll");
+		if (gprfSupportedInternal())
+		{
+			try {
+				System.loadLibrary("gs");
+				gs_so_available = true;
+			}
+			catch (UnsatisfiedLinkError e) {
+				gs_so_available = false;
+			}
+		}
 	}
 
 	/* Readable members */
@@ -26,6 +44,7 @@ public class MuPDFCore {
 	private boolean isUnencryptedPDF;
 
 	/* The native functions */
+	private static native boolean gprfSupportedInternal();
 	private native long openFile(String filename);
 	//private native long openBuffer();
 	private native long openBuffer(String magic);
@@ -70,6 +89,12 @@ public class MuPDFCore {
 	private native long createCookie();
 	private native void destroyCookie(long cookie);
 	private native void abortCookie(long cookie);
+	private native String startProofInternal(int resolution);
+	private native void endProofInternal(String filename);
+	private native int getNumSepsOnPageInternal(int page);
+	private native int controlSepOnPageInternal(int page, int sep, boolean disable);
+	private native Separation getSepInternal(int page, int sep);
+
 
 	
 	public native boolean javascriptSupported();
@@ -602,6 +627,40 @@ public class MuPDFCore {
 
 	public synchronized void save() {
 		saveInternal();
+	}
+
+	public synchronized String startProof(int resolution) {
+		return startProofInternal(resolution);
+	}
+
+	public synchronized void endProof(String filename) {
+		endProofInternal(filename);
+	}
+
+	public static boolean gprfSupported() {
+		if (gs_so_available == false)
+			return false;
+		return gprfSupportedInternal();
+	}
+
+	public boolean canProof() {
+		String format = fileFormat();
+		if (format.contains("PDF"))
+			return true;
+		return false;
+	}
+
+
+	public synchronized int getNumSepsOnPage(int page) {
+		return getNumSepsOnPageInternal(page);
+	}
+
+	public synchronized int controlSepOnPage(int page, int sep, boolean disable) {
+		return controlSepOnPageInternal(page, sep, disable);
+	}
+
+	public synchronized Separation getSep(int page, int sep) {
+		return getSepInternal(page, sep);
 	}
 	
 	public int getDisplayPages() {
